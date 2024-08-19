@@ -3,6 +3,7 @@ from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QMainWindow, QApplication, QPushButton
 from PyQt5 import uic
 import sys
+import backgroundimg
 
 QtWidgets.QApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling, True) #enable highdpi scaling
 QtWidgets.QApplication.setAttribute(QtCore.Qt.AA_UseHighDpiPixmaps, True)
@@ -14,11 +15,11 @@ class LoginWindow(QMainWindow):
         super(LoginWindow, self).__init__()
 
         #Loading .ui file
-        uic.loadUi('login.ui', self)
+        uic.loadUi('loginwindow.ui', self)
 
         #declaring(identifying) widgets from .ui file
         self.loginButton=0
-        self.registerWindowButton=self.findChild(QPushButton, "pushButton_2")
+        self.registerWindowButton=self.findChild(QPushButton, "pushButton_4")
 
         #Button click checking code
         self.registerWindowButton.clicked.connect(self.openRegisterWindow)
@@ -36,10 +37,10 @@ class RegisterWindow(QMainWindow):
         super(RegisterWindow, self).__init__()
 
         #Loading .ui file
-        uic.loadUi('register.ui', self)
+        uic.loadUi('registerwindow.ui', self)
 
         #declaring(identifying) widgets from .ui file
-        self.loginWindowButton=self.findChild(QPushButton, "pushButton_2")
+        self.loginWindowButton=self.findChild(QPushButton, "pushButton_3")
 
         #Button click checking code
         self.loginWindowButton.clicked.connect(self.openLoginWindow)
