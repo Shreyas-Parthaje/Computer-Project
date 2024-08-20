@@ -6,8 +6,8 @@ import sys
 import backgroundimg
 
 
-QtWidgets.QApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling, True) #enable highdpi scaling
-QtWidgets.QApplication.setAttribute(QtCore.Qt.AA_UseHighDpiPixmaps, True)
+#QtWidgets.QApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling, True) #enable highdpi scaling
+#QtWidgets.QApplication.setAttribute(QtCore.Qt.AA_UseHighDpiPixmaps, True)
 
 
 # Code for login window
@@ -21,7 +21,7 @@ class LoginWindow(QMainWindow):
         #declaring(identifying) widgets from .ui file
         self.loginButton=self.findChild(QPushButton, 'pushButton')
         self.registerWindowButton=self.findChild(QPushButton, "pushButton_4")
-        self.emailField=self.findChild(QLineEdit, 'lineEdit')
+        self.emailField=self.findChild(QLineEdit, 'lineEdit_3')
         self.passwordField=self.findChild(QLineEdit, 'lineEdit_2')
 
         #Button click checking code
@@ -50,6 +50,8 @@ class RegisterWindow(QMainWindow):
 
         #declaring(identifying) widgets from .ui file
         self.loginWindowButton=self.findChild(QPushButton, "pushButton_3")
+        self.emailField=self.findChild(QLineEdit, 'lineEdit')
+        self.passwordField=self.findChild(QLineEdit, 'lineEdit_2')
 
         #Button click checking code
         self.loginWindowButton.clicked.connect(self.openLoginWindow)
