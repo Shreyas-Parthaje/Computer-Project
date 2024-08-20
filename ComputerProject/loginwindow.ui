@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>655</width>
-    <height>404</height>
+    <width>666</width>
+    <height>432</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -18,18 +18,18 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>661</width>
-     <height>411</height>
+     <width>671</width>
+     <height>451</height>
     </rect>
    </property>
    <property name="styleSheet">
-    <string notr="true">background-image:url(:/newPrefix/Downloads/3334896 1.jpg);</string>
+    <string notr="true">background-image:url(:/newPrefix/background.jpg)</string>
    </property>
    <property name="text">
     <string/>
    </property>
    <property name="pixmap">
-    <pixmap resource="background.qrc">:/newPrefix/Downloads/3334896 1.jpg</pixmap>
+    <pixmap>:/newPrefix/Downloads/3334896 1.jpg</pixmap>
    </property>
    <property name="scaledContents">
     <bool>true</bool>
@@ -38,10 +38,10 @@
   <widget class="QFrame" name="frame">
    <property name="geometry">
     <rect>
-     <x>221</x>
-     <y>50</y>
+     <x>210</x>
+     <y>60</y>
      <width>252</width>
-     <height>287</height>
+     <height>301</height>
     </rect>
    </property>
    <property name="styleSheet">
@@ -60,15 +60,15 @@ border-radius:12px;
    <widget class="QLabel" name="label_2">
     <property name="geometry">
      <rect>
-      <x>50</x>
-      <y>50</y>
-      <width>151</width>
-      <height>31</height>
+      <x>40</x>
+      <y>70</y>
+      <width>181</width>
+      <height>41</height>
      </rect>
     </property>
     <property name="font">
      <font>
-      <pointsize>20</pointsize>
+      <pointsize>23</pointsize>
       <weight>75</weight>
       <bold>true</bold>
      </font>
@@ -88,28 +88,175 @@ color:white;</string>
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>100</y>
+      <y>140</y>
       <width>231</width>
       <height>31</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <pointsize>8</pointsize>
+      <weight>50</weight>
+      <bold>false</bold>
+     </font>
+    </property>
     <property name="styleSheet">
-     <string notr="true">border-radius:15px;</string>
+     <string notr="true">border-radius:15px;
+padding-left:15px;
+color:white;
+</string>
+    </property>
+    <property name="alignment">
+     <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+    </property>
+    <property name="placeholderText">
+     <string>Email</string>
     </property>
    </widget>
    <widget class="QLineEdit" name="lineEdit_2">
     <property name="geometry">
      <rect>
       <x>10</x>
-      <y>140</y>
+      <y>180</y>
       <width>231</width>
       <height>31</height>
      </rect>
     </property>
+    <property name="font">
+     <font>
+      <pointsize>8</pointsize>
+     </font>
+    </property>
     <property name="styleSheet">
-     <string notr="true">border-radius:15px;</string>
+     <string notr="true">border-radius:15px;
+padding-left:15px;
+color:white;
+</string>
+    </property>
+    <property name="placeholderText">
+     <string>Password</string>
     </property>
    </widget>
+   <widget class="QPushButton" name="pushButton">
+    <property name="geometry">
+     <rect>
+      <x>65</x>
+      <y>240</y>
+      <width>121</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>8</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="cursor">
+     <cursorShape>PointingHandCursor</cursorShape>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">background-color:rgb(61, 40, 224);
+color:white;
+font-weight:bold;
+border-radius:15px;</string>
+    </property>
+    <property name="text">
+     <string>Login</string>
+    </property>
+    <property name="checkable">
+     <bool>false</bool>
+    </property>
+    <property name="checked">
+     <bool>false</bool>
+    </property>
+    <property name="autoDefault">
+     <bool>false</bool>
+    </property>
+    <property name="default">
+     <bool>false</bool>
+    </property>
+    <property name="flat">
+     <bool>false</bool>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_3">
+    <property name="geometry">
+     <rect>
+      <x>29</x>
+      <y>20</y>
+      <width>101</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="cursor">
+     <cursorShape>PointingHandCursor</cursorShape>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color:white;
+background-color:rgba(61, 40, 224, 0.2);
+border-top-left-radius:5px;
+border-bottom-left-radius:5px;
+border-top-right-radius:0px;
+border-bottom-right-radius:0px;
+</string>
+    </property>
+    <property name="text">
+     <string>login</string>
+    </property>
+    <property name="checkable">
+     <bool>false</bool>
+    </property>
+    <property name="checked">
+     <bool>false</bool>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_4">
+    <property name="geometry">
+     <rect>
+      <x>130</x>
+      <y>20</y>
+      <width>101</width>
+      <height>31</height>
+     </rect>
+    </property>
+    <property name="font">
+     <font>
+      <pointsize>10</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
+    </property>
+    <property name="cursor">
+     <cursorShape>PointingHandCursor</cursorShape>
+    </property>
+    <property name="styleSheet">
+     <string notr="true">color:white;
+background-color:rgba(217, 217, 217, 0.1);
+border-top-left-radius:0px;
+border-bottom-left-radius:0px;
+border-top-right-radius:5px;
+border-bottom-right-radius:5px;
+</string>
+    </property>
+    <property name="text">
+     <string>register</string>
+    </property>
+   </widget>
+   <zorder>label_2</zorder>
+   <zorder>lineEdit</zorder>
+   <zorder>lineEdit_2</zorder>
+   <zorder>pushButton_3</zorder>
+   <zorder>pushButton_4</zorder>
+   <zorder>pushButton</zorder>
   </widget>
  </widget>
  <resources>
