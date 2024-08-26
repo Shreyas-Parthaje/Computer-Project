@@ -1,4 +1,4 @@
-import mysql.connector
+'''import mysql.connector
 # Function to connect to the MySQL database
 def create_connection(host_name, user_name, user_password, db_name):
     connection = mysql.connector.connect(
@@ -8,7 +8,7 @@ def create_connection(host_name, user_name, user_password, db_name):
         database=db_name
     )
     print("Connected to MySQL Database")
-    return connection
+    return connection'''
 import mysql.connector
 
 class DatabaseConnection:
