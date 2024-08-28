@@ -65,7 +65,7 @@ def get_categories(connection, user_id):
 
 # Expense-related functions
 def add_expense(connection, category_id, amount, date, description, user_id):
-    query = f"INSERT INTO Expenses (category_id, amount, date, description, user_id) VALUES ({category_id}, {amount}, '{date}', '{description}', {user_id})"
+    query = f"INSERT INTO Expenses (category_id, amount, income_date, description, user_id) VALUES ({category_id}, {amount}, '{date}', '{description}', {user_id})"
     execute_query(connection, query)
 
 def view_expenses(connection, user_id):
