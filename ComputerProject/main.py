@@ -41,7 +41,6 @@ class LoginWindow(QMainWindow):
         if login_user(self.connection, email, password):
             global uid
             uid=login_user(self.connection, email, password)[0]
-            print(uid)
             self.w=MainWindow()
             self.w.show()
         else:
@@ -180,10 +179,18 @@ class addEarningWindow(QMainWindow):
         self.recurringEarningCheckBox.clicked.connect(self.changeState)
         self.addEarningButton.clicked.connect(self.addEarning)
 
+        self.dateText=self.dateButton.text().split('/')
+        self.sqlDateText=''
+
+        for i in self.dateText[::-1]:
+            self.sqlDateText+=i+'-'
+        self.sqlDateText=self.sqlDateText[0:-1]
+        print(self.sqlDateText)
+
 
     def addEarning(self):
         global uid
-        add_income(self.connection, self.nameOfEarningField.text(), self.amountField.text(), self.dateButton.text(), self.descriptionField.toPlainText(), uid, self.recurringEarningCheckBox.isChecked())
+        add_income(self.connection, self.nameOfEarningField.text(), self.amountField.text(), self.sqlDateText, self.descriptionField.toPlainText(), uid, self.recurringEarningCheckBox.isChecked())
         msg=QMessageBox()
         msg.setWindowTitle("Successfull.")
         msg.setText("Record added successfully.")
