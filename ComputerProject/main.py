@@ -1,0 +1,215 @@
+
+from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtWidgets import QMainWindow, QApplication, QTextEdit, QLabel, QFrame, QPushButton, QLineEdit, QMessageBox, QGraphicsBlurEffect, QGraphicsDropShadowEffect
+from PyQt5 import uic
+import sys
+import backgroundimg
+import background_addEarningAndExpenseWindow
+from dbFunctions import *
+
+
+#QtWidgets.QApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling, True) #enable highdpi scaling
+#QtWidgets.QApplication.setAttribute(QtCore.Qt.AA_UseHighDpiPixmaps, True)
+
+uid=0
+# Code for login window
+class LoginWindow(QMainWindow):
+    def __init__(self):
+        super().__init__()
+
+        #Loading .ui file
+        uic.loadUi('loginwindow.ui', self)
+
+        # Get the database connection
+        self.connection = DatabaseConnection().get_connection()
+
+        #declaring(identifying) widgets from .ui file
+        self.loginButton=self.findChild(QPushButton, 'pushButton')
+        self.registerWindowButton=self.findChild(QPushButton, "pushButton_4")
+        self.emailField=self.findChild(QLineEdit, 'lineEdit_3')
+        self.passwordField=self.findChild(QLineEdit, 'lineEdit_2')
+
+        #Button click checking code
+        self.registerWindowButton.clicked.connect(self.openRegisterWindow)
+
+        self.loginButton.clicked.connect(self.login)
+
+    def login(self):
+        email = self.emailField.text()
+        password = self.passwordField.text()
+        
+        if login_user(self.connection, email, password):
+            global uid
+            uid=login_user(self.connection, email, password)[0]
+            print(uid)
+            self.w=MainWindow()
+            self.w.show()
+        else:
+            msg=QMessageBox()
+            msg.setWindowTitle("Something went wrong.")
+            msg.setText("Invalid email or password.")
+            msg.exec_()
+
+
+    #This function will be excecuted when registerWindowButton is clicked
+    def openRegisterWindow(self, checked):
+        #Window initialisation
+        self.w=RegisterWindow()
+        #Execution of window
+        self.w.show()
+        self.close()
+
+#Code for register window
+class RegisterWindow(QMainWindow):
+    def __init__(self):
+        super().__init__()
+
+        #Loading .ui file
+        uic.loadUi('registerwindow.ui', self)
+
+        # Get the database connection
+        self.connection = DatabaseConnection().get_connection()
+
+        #declaring(identifying) widgets from .ui file
+        self.loginWindowButton=self.findChild(QPushButton, "pushButton_3")
+        self.emailField=self.findChild(QLineEdit, 'lineEdit')
+        self.passwordField=self.findChild(QLineEdit, 'lineEdit_2')
+        self.registerWindowButton=self.findChild(QPushButton, 'pushButton')
+
+        #Button click checking code
+        self.loginWindowButton.clicked.connect(self.openLoginWindow)
+        self.registerWindowButton.clicked.connect(self.register)
+
+    #This function will be excecuted when loginWindowButton is clicked
+    def openLoginWindow(self, checked):
+        #Window initialisation
+        self.w=LoginWindow()
+        #Execution of window
+        self.w.show()
+        self.close()
+
+    def register(self):
+        email = self.emailField.text()
+        password = self.passwordField.text()
+        
+        try:
+            if email and password:  
+                register_user(self.connection, email, password)
+                self.w=MainWindow()
+                self.w.show()
+            else:
+                msg=QMessageBox()
+                msg.setWindowTitle("Something went wrong.")
+                msg.setText("Please enter both email and password.")
+                msg.exec_()
+
+        except:
+            msg=QMessageBox()
+            msg.setWindowTitle("Something went wrong.")
+            msg.setText("User already exists.")
+            msg.exec_()
+
+
+
+class MainWindow(QMainWindow):
+    def __init__(self):
+        super().__init__()
+
+        #Loading .ui file
+        uic.loadUi('mainwindow.ui', self)
+
+        self.addEarningButton=self.findChild(QPushButton, "pushButton")
+        self.lightThemeCheckBox=self.findChild(QPushButton, "pushButton_3")
+
+        self.addEarningButton.clicked.connect(self.openAddEarningWindow)
+        self.lightThemeCheckBox.clicked.connect(self.switchToLightTheme)
+
+    def openAddEarningWindow(self):
+        self.w=addEarningWindow()
+        self.w.show()
+
+    def switchToLightTheme(self):
+        if self.lightThemeCheckBox.isChecked():
+            self.lightThemeCheckBox.setStyleSheet('QPushButton{background-color:white;border:2px solid;border-radius:7px;border-color:rgb(62, 58, 83);}')
+        
+        else:
+            self.lightThemeCheckBox.setStyleSheet('QPushButton{background-color:rgb(61, 40, 224);border:2px solid;border-radius:7px;border-color:rgb(62, 58, 83);}')
+
+class addExpenseWindow(QMainWindow):
+    def __init__(self):
+        super().__init__()
+
+        uic.loadUi("addExpenseWindow.ui", self)
+
+        self.openEarningWindowButton=self.findChild(QPushButton, "pushButton_3")
+        self.recurringExpenseCheckBox=self.findChild(QPushButton, "pushButton_5")
+
+        self.openEarningWindowButton.clicked.connect(self.openEarningWindow)
+        self.recurringExpenseCheckBox.clicked.connect(self.changeState)
+        
+    def openEarningWindow(self):
+        self.w=addEarningWindow()
+        self.w.show()
+        self.close()
+
+    def changeState(self):
+        if self.recurringExpenseCheckBox.isChecked():
+            self.recurringExpenseCheckBox.setStyleSheet('QPushButton{background-color:rgba(217, 217, 217,0);border:2px solid;border-radius:7px;border-color:rgb(71, 71, 71);}')
+        else:
+            self.recurringExpenseCheckBox.setStyleSheet('QPushButton{background-color:rgb(61, 40, 224);border:2px solid;border-radius:7px;border-color:rgb(71, 71, 71);}')
+
+class addEarningWindow(QMainWindow):
+    def __init__(self):
+        super().__init__()
+
+        uic.loadUi("addEarningWindow.ui", self)
+
+        self.connection = DatabaseConnection().get_connection()
+
+
+        self.openExpenseWindowButton=self.findChild(QPushButton, "pushButton_4")
+        self.recurringEarningCheckBox=self.findChild(QPushButton, "pushButton_5")
+        self.addEarningButton=self.findChild(QPushButton, "pushButton")
+
+        self.nameOfEarningField=self.findChild(QLineEdit,"lineEdit_3")
+        self.amountField=self.findChild(QLineEdit,"lineEdit_2")
+        self.dateButton=self.findChild(QPushButton, "pushButton_2")
+        self.descriptionField=self.findChild(QTextEdit, "textEdit")
+
+        self.openExpenseWindowButton.clicked.connect(self.openExpenseWindow)
+        self.recurringEarningCheckBox.clicked.connect(self.changeState)
+        self.addEarningButton.clicked.connect(self.addEarning)
+
+
+    def addEarning(self):
+        global uid
+        add_income(self.connection, self.nameOfEarningField.text(), self.amountField.text(), self.dateButton.text(), self.descriptionField.toPlainText(), uid, self.recurringEarningCheckBox.isChecked())
+        msg=QMessageBox()
+        msg.setWindowTitle("Successfull.")
+        msg.setText("Record added successfully.")
+        msg.exec_()
+    def openExpenseWindow(self):
+        self.w=addExpenseWindow()
+        self.w.show()
+        self.close()
+
+    def changeState(self):
+        if self.recurringEarningCheckBox.isChecked():
+            self.recurringEarningCheckBox.setStyleSheet('QPushButton{background-color:rgba(217, 217, 217,0);border:2px solid;border-radius:7px;border-color:rgb(71, 71, 71);}')
+        else:
+            self.recurringEarningCheckBox.setStyleSheet('QPushButton{background-color:rgb(61, 40, 224);border:2px solid;border-radius:7px;border-color:rgb(71, 71, 71);}')
+
+#App initialisation
+app=QApplication(sys.argv)
+
+# Initialize the database connection
+DatabaseConnection()
+
+#Window initialisation
+Mainwindow=LoginWindow()
+
+#Execution of window
+Mainwindow.show()
+
+#Execution of app
+app.exec_()
