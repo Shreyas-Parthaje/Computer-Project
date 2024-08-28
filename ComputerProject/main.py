@@ -185,7 +185,6 @@ class addEarningWindow(QMainWindow):
         for i in self.dateText[::-1]:
             self.sqlDateText+=i+'-'
         self.sqlDateText=self.sqlDateText[0:-1]
-        print(self.sqlDateText)
 
 
     def addEarning(self):
