@@ -4,14 +4,16 @@ class DatabaseConnection:
     def __init__(self):
         # Initialize the database connection
         self.connection = mysql.connector.connect(
-            host="localhost",
-            user="root",
-            password="1234",
-            database="Csproj"
+            user= 'i7771355_e1zq1',
+            password= '3u0NFC]{p~^#',
+            host= '184.168.102.202',
+            database= 'csproj',
         )
 
     def get_connection(self):
         return self.connection
+
+
 
 # Function to execute a query
 def execute_query(connection, query, values=None):
@@ -40,20 +42,18 @@ def login_user(connection, username, password):
     query = f"SELECT * FROM Users WHERE username = '{username}' AND password = '{password}'"
     user = fetch_results(connection, query)
     return user[0] if user else None
-
-# Category-related functions
 '''
+# Category-related functions
 def create_category(connection, category_name, user_id):
     query = f"INSERT INTO Categories (category_name, user_id) VALUES ('{category_name}', {user_id})"
     execute_query(connection, query)
     
 def get_categories(connection, user_id):
     query = f"SELECT * FROM Categories WHERE user_id = {user_id}"
-    return fetch_results(connection, query)
-'''
+    return fetch_results(connection, query)'''
 
 # Expense-related functions
-def add_expense(connection, category_id, amount, date, description, user_id):
+def add_expense(connection, category_id, amount, income_date, description, user_id):
     query = f"INSERT INTO Expenses (category_id, amount, income_date, description, user_id) VALUES ({category_id}, {amount}, '{income_date}', '{description}', {user_id})"
     execute_query(connection, query)
 
@@ -69,7 +69,7 @@ def delete_expense(connection, expense_id):
 
 
 # Income-related functions
-def add_income(connection, source, amount, date, description, user_id, is_recurring):
+def add_income(connection, source, amount, income_date, description, user_id, is_recurring):
     query = f"INSERT INTO Income (source, amount, income_date, description, user_id, is_recurring) VALUES ('{source}', {amount}, '{income_date}', '{description}', {user_id}, {is_recurring})"
     execute_query(connection, query)
 
