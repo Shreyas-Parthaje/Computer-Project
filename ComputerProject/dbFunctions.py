@@ -55,6 +55,7 @@ def login_user(connection, username, password):
     return user[0] if user else None
 
 # Category-related functions
+'''
 def create_category(connection, category_name, user_id):
     query = f"INSERT INTO Categories (category_name, user_id) VALUES ('{category_name}', {user_id})"
     execute_query(connection, query)
@@ -62,6 +63,7 @@ def create_category(connection, category_name, user_id):
 def get_categories(connection, user_id):
     query = f"SELECT * FROM Categories WHERE user_id = {user_id}"
     return fetch_results(connection, query)
+'''
 
 # Expense-related functions
 def add_expense(connection, category_id, amount, date, description, user_id):
