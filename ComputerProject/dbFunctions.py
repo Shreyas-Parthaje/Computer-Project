@@ -1,14 +1,3 @@
-'''import mysql.connector
-# Function to connect to the MySQL database
-def create_connection(host_name, user_name, user_password, db_name):
-    connection = mysql.connector.connect(
-        host=host_name,
-        user=user_name,
-        passwd=user_password,
-        database=db_name
-    )
-    print("Connected to MySQL Database")
-    return connection'''
 import mysql.connector
 
 class DatabaseConnection:
@@ -23,8 +12,6 @@ class DatabaseConnection:
 
     def get_connection(self):
         return self.connection
-
-
 
 # Function to execute a query
 def execute_query(connection, query, values=None):
@@ -67,7 +54,7 @@ def get_categories(connection, user_id):
 
 # Expense-related functions
 def add_expense(connection, category_id, amount, date, description, user_id):
-    query = f"INSERT INTO Expenses (category_id, amount, income_date, description, user_id) VALUES ({category_id}, {amount}, '{date}', '{description}', {user_id})"
+    query = f"INSERT INTO Expenses (category_id, amount, income_date, description, user_id) VALUES ({category_id}, {amount}, '{income_date}', '{description}', {user_id})"
     execute_query(connection, query)
 
 def view_expenses(connection, user_id):
@@ -83,7 +70,7 @@ def delete_expense(connection, expense_id):
 
 # Income-related functions
 def add_income(connection, source, amount, date, description, user_id, is_recurring):
-    query = f"INSERT INTO Income (source, amount, date, description, user_id, is_recurring) VALUES ('{source}', {amount}, '{date}', '{description}', {user_id}, {is_recurring})"
+    query = f"INSERT INTO Income (source, amount, income_date, description, user_id, is_recurring) VALUES ('{source}', {amount}, '{income_date}', '{description}', {user_id}, {is_recurring})"
     execute_query(connection, query)
 
 def view_income(connection, user_id):
