@@ -2,7 +2,6 @@ import mysql.connector
 
 class DatabaseConnection:
     def __init__(self):
-        # Initialize the database connection
         self.connection = mysql.connector.connect(
             user= 'i7771355_e1zq1',
             password= '3u0NFC]{p~^#',
