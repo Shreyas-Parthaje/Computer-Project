@@ -60,7 +60,7 @@ def view_expenses(connection, user_id):
     query = f"SELECT * FROM Expenses WHERE user_id = {user_id}"
     expenses = fetch_results(connection, query)
     for expense in expenses:
-        print(f"ID: {expense[0]}, Category Name: {expense[2]}, Amount: {expense[3]}, Date: {expense[4]}, Description: {expense[5]}")
+        print(f"ID: {expense[0]}, Expense Name: {expense[1]}, Amount: {expense[2]}, Date: {expense[3]}, Description: {expense[4]}")
 
 def view_recent_expenses(connection,user_id):
     query=f"SELECT * FROM Expense WHERE user_id = {user_id} ORDER BY Expense_date DESC"
