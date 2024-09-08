@@ -52,15 +52,15 @@ def get_categories(connection, user_id):
     return fetch_results(connection, query)'''
 
 # Expense-related functions
-def add_expense(connection, category_id, amount, expense_date, description, user_id):
-    query = f"INSERT INTO Expenses (category_id, amount, expense_date, description, user_id) VALUES ({category_id}, {amount}, '{expense_date}', '{description}', {user_id})"
+def add_expense(connection, category_id, category_name, amount, expense_date, description, user_id):
+    query = f"INSERT INTO Expenses (category_id, category_name, amount, expense_date, description, user_id) VALUES ({category_id}, {category_name}, {amount}, '{expense_date}', '{description}', {user_id})"
     execute_query(connection, query)
 
 def view_expenses(connection, user_id):
     query = f"SELECT * FROM Expenses WHERE user_id = {user_id}"
     expenses = fetch_results(connection, query)
     for expense in expenses:
-        print(f"ID: {expense[0]}, Category ID: {expense[1]}, Amount: {expense[2]}, Date: {expense[3]}, Description: {expense[4]}")
+        print(f"ID: {expense[0]}, Category Name: {expense[2]}, Amount: {expense[3]}, Date: {expense[4]}, Description: {expense[5]}")
 
 def view_recent_expenses(connection,user_id):
     query=f"SELECT * FROM Expense WHERE user_id = {user_id} ORDER BY Expense_date DESC"
