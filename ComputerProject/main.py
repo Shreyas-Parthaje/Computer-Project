@@ -140,11 +140,28 @@ class addExpenseWindow(QMainWindow):
 
         uic.loadUi("addExpenseWindow.ui", self)
 
+        self.connection = DatabaseConnection().get_connection()
+
         self.openEarningWindowButton=self.findChild(QPushButton, "pushButton_3")
         self.recurringExpenseCheckBox=self.findChild(QPushButton, "pushButton_5")
+        self.addExpenseButton=self.findChild(QPushButton, "pushButton")
+
+        self.amountField=self.findChild(QLineEdit, "lineEdit_2")
+        self.expenseNameField=self.findChild(QLineEdit, "lineEdit_3")
+        self.dateButton=self.findChild(QPushButton, "pushButton_2")
+        self.descriptionField=self.findChild(QTextEdit, "textEdit")
+
 
         self.openEarningWindowButton.clicked.connect(self.openEarningWindow)
         self.recurringExpenseCheckBox.clicked.connect(self.changeState)
+        self.addExpenseButton.clicked.connect(self.addExpense)
+
+        self.dateText=self.dateButton.text().split('/')
+        self.sqlDateText=''
+
+        for i in self.dateText[::-1]:
+            self.sqlDateText+=i+'-'
+        self.sqlDateText=self.sqlDateText[0:-1]
         
     def openEarningWindow(self):
         self.w=addEarningWindow()
@@ -153,9 +170,21 @@ class addExpenseWindow(QMainWindow):
 
     def changeState(self):
         if self.recurringExpenseCheckBox.isChecked():
-            self.recurringExpenseCheckBox.setStyleSheet('QPushButton{background-color:rgba(217, 217, 217,0);border:2px solid;border-radius:7px;border-color:rgb(71, 71, 71);}')
-        else:
             self.recurringExpenseCheckBox.setStyleSheet('QPushButton{background-color:rgb(61, 40, 224);border:2px solid;border-radius:7px;border-color:rgb(71, 71, 71);}')
+            self.recurringExpenseCheckBox.setChecked(True)
+        else:
+            self.recurringExpenseCheckBox.setStyleSheet('QPushButton{background-color:rgba(217, 217, 217,0);border:2px solid;border-radius:7px;border-color:rgb(71, 71, 71);}')
+            self.recurringExpenseCheckBox.setChecked(False)
+
+
+    def addExpense(self):
+        global uid
+        add_expense(self.connection,  self.expenseNameField.text(), self.amountField.text(), self.sqlDateText, self.descriptionField.toPlainText(), uid)
+        msg=QMessageBox()
+        msg.setWindowTitle("Successfull.")
+        msg.setText("Record added successfully.")
+        msg.exec_()
+
 
 class addEarningWindow(QMainWindow):
     def __init__(self):
@@ -170,7 +199,7 @@ class addEarningWindow(QMainWindow):
         self.recurringEarningCheckBox=self.findChild(QPushButton, "pushButton_5")
         self.addEarningButton=self.findChild(QPushButton, "pushButton")
 
-        self.nameOfEarningField=self.findChild(QLineEdit,"lineEdit_3")
+        self.earningNameField=self.findChild(QLineEdit,"lineEdit_3")
         self.amountField=self.findChild(QLineEdit,"lineEdit_2")
         self.dateButton=self.findChild(QPushButton, "pushButton_2")
         self.descriptionField=self.findChild(QTextEdit, "textEdit")
@@ -189,11 +218,12 @@ class addEarningWindow(QMainWindow):
 
     def addEarning(self):
         global uid
-        add_income(self.connection, self.nameOfEarningField.text(), self.amountField.text(), self.sqlDateText, self.descriptionField.toPlainText(), uid, self.recurringEarningCheckBox.isChecked())
+        add_income(self.connection, self.earningNameField.text(), self.amountField.text(), self.sqlDateText, self.descriptionField.toPlainText(), uid, self.recurringEarningCheckBox.isChecked())
         msg=QMessageBox()
         msg.setWindowTitle("Successfull.")
         msg.setText("Record added successfully.")
         msg.exec_()
+        
     def openExpenseWindow(self):
         self.w=addExpenseWindow()
         self.w.show()
@@ -201,10 +231,12 @@ class addEarningWindow(QMainWindow):
 
     def changeState(self):
         if self.recurringEarningCheckBox.isChecked():
-            self.recurringEarningCheckBox.setStyleSheet('QPushButton{background-color:rgba(217, 217, 217,0);border:2px solid;border-radius:7px;border-color:rgb(71, 71, 71);}')
-        else:
             self.recurringEarningCheckBox.setStyleSheet('QPushButton{background-color:rgb(61, 40, 224);border:2px solid;border-radius:7px;border-color:rgb(71, 71, 71);}')
-
+            self.recurringEarningCheckBox.setChecked(True)
+        else:
+            self.recurringEarningCheckBox.setStyleSheet('QPushButton{background-color:rgba(217, 217, 217,0);border:2px solid;border-radius:7px;border-color:rgb(71, 71, 71);}')
+            self.recurringEarningCheckBox.setChecked(False)
+            
 #App initialisation
 app=QApplication(sys.argv)
 
