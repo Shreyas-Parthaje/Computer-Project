@@ -52,21 +52,21 @@ def get_categories(connection, user_id):
     return fetch_results(connection, query)'''
 
 # Expense-related functions
-def add_expense(connection, category_id, category_name, amount, expense_date, description, user_id):
-    query = f"INSERT INTO Expenses (category_id, category_name, amount, expense_date, description, user_id) VALUES ({category_id}, {category_name}, {amount}, '{expense_date}', '{description}', {user_id})"
+def add_expense(connection, expense_name, amount, expense_date, description, user_id):
+    query = f"INSERT INTO Expenses (expense_name, amount, expense_date, description, user_id) VALUES ({expense_name}, {amount}, '{expense_date}', '{description}', {user_id})"
     execute_query(connection, query)
 
 def view_expenses(connection, user_id):
     query = f"SELECT * FROM Expenses WHERE user_id = {user_id}"
     expenses = fetch_results(connection, query)
     for expense in expenses:
-        print(f"ID: {expense[0]}, Expense Name: {expense[1]}, Amount: {expense[2]}, Date: {expense[3]}, Description: {expense[4]}")
+        print(f"Expense Name: {expense[0]}, Amount: {expense[1]}, Date: {expense[2]}, Description: {expense[3]}")
 
 def view_recent_expenses(connection,user_id):
     query=f"SELECT * FROM Expense WHERE user_id = {user_id} ORDER BY Expense_date DESC"
     expense_list = fetch_results(connection, query)
     for expense in expense_list[:3]:
-        print(f"ID: {expense[0]}, Source: {expense[1]}, Amount: {expense[2]}, Date: {expense[3]}, Recurring: {recurring_status}")
+        print(f"Expense_Name: {expense[0]}, Amount: {expense[1]}, Date: {expense[2]}")
 
 def delete_expense(connection, expense_id):
     query = f"DELETE FROM Expenses WHERE id = {expense_id}"
