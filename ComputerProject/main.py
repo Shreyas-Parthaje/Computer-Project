@@ -1,3 +1,4 @@
+import os
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QMainWindow, QApplication, QTextEdit, QLabel, QFrame, QPushButton, QLineEdit, QMessageBox, QGraphicsBlurEffect, QGraphicsDropShadowEffect
 from PyQt5 import uic
@@ -18,7 +19,7 @@ class LoginWindow(QMainWindow):
         super().__init__()
 
         #Loading .ui file
-        uic.loadUi('loginwindow.ui', self)
+        uic.loadUi('UI/loginwindow.ui', self)
 
         # Get the database connection
         self.connection = DatabaseConnection().get_connection()
@@ -64,7 +65,7 @@ class RegisterWindow(QMainWindow):
         super().__init__()
 
         #Loading .ui file
-        uic.loadUi('registerwindow.ui', self)
+        uic.loadUi('UI/registerwindow.ui', self)
 
         # Get the database connection
         self.connection = DatabaseConnection().get_connection()
@@ -116,7 +117,7 @@ class MainWindow(QMainWindow):
         super().__init__()
 
         #Loading .ui file
-        uic.loadUi('mainwindow.ui', self)
+        uic.loadUi('UI/mainwindow.ui', self)
 
         self.addEarningButton=self.findChild(QPushButton, "pushButton")
         self.lightThemeCheckBox=self.findChild(QPushButton, "pushButton_3")
@@ -139,7 +140,7 @@ class addExpenseWindow(QMainWindow):
     def __init__(self):
         super().__init__()
 
-        uic.loadUi("addExpenseWindow.ui", self)
+        uic.loadUi("UI/addExpenseWindow.ui", self)
 
         self.connection = DatabaseConnection().get_connection()
 
@@ -191,7 +192,7 @@ class addEarningWindow(QMainWindow):
     def __init__(self):
         super().__init__()
 
-        uic.loadUi("addEarningWindow.ui", self)
+        uic.loadUi("UI/addEarningWindow.ui", self)
 
         self.connection = DatabaseConnection().get_connection()
 
