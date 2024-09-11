@@ -52,8 +52,8 @@ def get_categories(connection, user_id):
     return fetch_results(connection, query)'''
 
 # Expense-related functions
-def add_expense(connection, expense_name, amount, expense_date, description, user_id):
-    query = f"INSERT INTO Expenses (expense_name, amount, expense_date, description, user_id) VALUES ('{expense_name}', '{amount}', '{expense_date}', '{description}', {user_id}, {is_recurring})"
+def add_expense(connection, expense_name, amount, expense_date, description, user_id, is_recurring):
+    query = f"INSERT INTO Expenses (expense_name, amount, expense_date, description, user_id, is_recurring) VALUES ('{expense_name}', '{amount}', '{expense_date}', '{description}', {user_id}, {is_recurring})"
     execute_query(connection, query)
 
 def view_expenses(connection, user_id):
