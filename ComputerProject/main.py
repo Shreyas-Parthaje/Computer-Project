@@ -1,4 +1,3 @@
-
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QMainWindow, QApplication, QTextEdit, QLabel, QFrame, QPushButton, QLineEdit, QMessageBox, QGraphicsBlurEffect, QGraphicsDropShadowEffect
 from PyQt5 import uic
@@ -6,6 +5,7 @@ import sys
 import backgroundimg
 import background_addEarningAndExpenseWindow
 from dbFunctions import *
+
 
 
 #QtWidgets.QApplication.setAttribute(QtCore.Qt.AA_EnableHighDpiScaling, True) #enable highdpi scaling
@@ -74,6 +74,7 @@ class RegisterWindow(QMainWindow):
         self.emailField=self.findChild(QLineEdit, 'lineEdit')
         self.passwordField=self.findChild(QLineEdit, 'lineEdit_2')
         self.registerWindowButton=self.findChild(QPushButton, 'pushButton')
+        
 
         #Button click checking code
         self.loginWindowButton.clicked.connect(self.openLoginWindow)
@@ -179,7 +180,7 @@ class addExpenseWindow(QMainWindow):
 
     def addExpense(self):
         global uid
-        add_expense(self.connection,  self.expenseNameField.text(), self.amountField.text(), self.sqlDateText, self.descriptionField.toPlainText(), uid)
+        add_expense(self.connection,  self.expenseNameField.text(), self.amountField.text(), self.sqlDateText, self.descriptionField.toPlainText(), uid, self.recurringExpenseCheckBox.isChecked())
         msg=QMessageBox()
         msg.setWindowTitle("Successfull.")
         msg.setText("Record added successfully.")
