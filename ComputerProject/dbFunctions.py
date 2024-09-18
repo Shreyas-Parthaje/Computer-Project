@@ -62,6 +62,11 @@ def view_expenses(connection, user_id):
     for expense in expenses:
         print(f"Expense Name: {expense[0]}, Amount: {expense[1]}, Date: {expense[2]}, Description: {expense[3]}")
 
+def view_recent_expenses(connection,user_id):
+    query=f"SELECT * FROM Expense WHERE user_id = {user_id} ORDER BY Expense_date DESC"
+    expense_list = fetch_results(connection, query)
+    for expense in expense_list[:3]:
+        print(f"Expense_Name: {expense[0]}, Amount: {expense[1]}, Date: {expense[2]}")
 
 def delete_expense(connection, expense_id):
     query = f"DELETE FROM Expenses WHERE id = {expense_id}"
@@ -80,18 +85,12 @@ def view_income(connection, user_id):
         recurring_status = "Yes" if income[6] else "No"
         print(f"ID: {income[0]}, Source: {income[1]}, Amount: {income[2]}, Date: {income[3]}, Recurring: {recurring_status}")
 
+def view_recent_income(connection,user_id):
+    query=f"SELECT * FROM Income WHERE user_id = {user_id} ORDER BY Income_date DESC"
+    income_list = fetch_results(connection, query)
+    for income in income_list[:3]:
+        print(f"ID: {income[0]}, Source: {income[1]}, Amount: {income[2]}, Date: {income[3]}, Recurring: {recurring_status}")
 
 def delete_income(connection, income_id):
     query = f"DELETE FROM Income WHERE id = {income_id}"
     execute_query(connection, query)
-
-# Recent records
-def view_recent_income(connection,user_id):
-    query=f"SELECT CURDATE()"
-    current_date = fetch_results(connection, query)
-    query=f"SELECT SUM(amount) FROM Income WHERE user_id = {user_id} AND income_date = CURDATE()"
-    income_sum = fetch_results(connection, query)[0][0]
-    query=f"SELECT SUM(amount) FROM Expenses WHERE user_id = {user_id} AND expense_date = CURDATE()"
-    expense_sum = fetch_results(connection, query)[0][0]
-    return (current_date, income_sum, expense_sum)
-    
