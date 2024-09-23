@@ -78,6 +78,11 @@ def view_income(connection, user_id):
     for income in income_list:
         recurring_status = "Yes" if income[6] else "No"
         print(f"ID: {income[0]}, Source: {income[1]}, Amount: {income[2]}, Date: {income[3]}, Recurring: {recurring_status}")
+
+def delete_income(connection, income_id):
+    query = f"DELETE FROM Income WHERE id = {income_id}"
+    execute_query(connection, query)
+
 # View recent records
 def view_recent_records(connection, user_id):
     query = f"SELECT SUM(amount) FROM Income WHERE user_id = {user_id} AND YEAR(income_date) = YEAR(CURDATE()) AND MONTH(income_date) = MONTH(CURDATE())"
@@ -85,7 +90,3 @@ def view_recent_records(connection, user_id):
     query = f"SELECT SUM(amount) FROM Expenses WHERE user_id = {user_id} AND YEAR(income_date) = YEAR(CURDATE()) AND MONTH(income_date) = MONTH(CURDATE())"
     recent_expenses = fetch_results(connection, query)
     return (recent_income, recent_expenses)
-
-def delete_income(connection, income_id):
-    query = f"DELETE FROM Income WHERE id = {income_id}"
-    execute_query(connection, query)
