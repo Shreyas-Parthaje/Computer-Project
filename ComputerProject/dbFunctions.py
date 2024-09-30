@@ -86,7 +86,9 @@ def delete_income(connection, income_id):
 # View recent records
 def view_recent_records(connection, user_id):
     query = f"SELECT SUM(amount) FROM Income WHERE user_id = {user_id} AND YEAR(income_date) = YEAR(CURDATE()) AND MONTH(income_date) = MONTH(CURDATE())"
-    recent_income = fetch_results(connection, query)
-    query = f"SELECT SUM(amount) FROM Expenses WHERE user_id = {user_id} AND YEAR(income_date) = YEAR(CURDATE()) AND MONTH(income_date) = MONTH(CURDATE())"
-    recent_expenses = fetch_results(connection, query)
+    recent_income = fetch_results(connection, query)[0][0]
+    query = f"SELECT SUM(amount) FROM Expenses WHERE user_id = {user_id} AND YEAR(expense_date) = YEAR(CURDATE()) AND MONTH(expense_date) = MONTH(CURDATE())"
+    recent_expenses = fetch_results(connection, query)[0][0]
+    recent_income = float(recent_income) if recent_income else 0.00
+    recent_expenses = float(recent_expenses) if recent_expenses else 0.00
     return (recent_income, recent_expenses)
