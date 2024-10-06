@@ -168,7 +168,7 @@ class searchResult(QMainWindow):
     def __init__(self):
         super().__init__()
 
-        uic.loadUi('searchResult.ui', self)
+        uic.loadUi('UI/searchResult.ui', self)
 
         
 
