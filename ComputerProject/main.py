@@ -11,6 +11,10 @@ from dbFunctions import *
 
 uid=0
 calenderWindowSource=0
+searchFieldvalue=0
+
+db=DatabaseConnection()
+
 # Code for login window
 class LoginWindow(QMainWindow):
     def __init__(self):
@@ -20,7 +24,8 @@ class LoginWindow(QMainWindow):
         uic.loadUi('UI/loginwindow.ui', self)
 
         # Get the database connection
-        self.connection = DatabaseConnection().get_connection()
+        global db
+        self.connection=db.get_connection()
 
         #declaring(identifying) widgets from .ui file
         self.loginButton=self.findChild(QPushButton, 'pushButton')
@@ -66,7 +71,8 @@ class RegisterWindow(QMainWindow):
         uic.loadUi('UI/registerwindow.ui', self)
 
         # Get the database connection
-        self.connection = DatabaseConnection().get_connection()
+        global db
+        self.connection = db.get_connection()
 
         #declaring(identifying) widgets from .ui file
         self.loginWindowButton=self.findChild(QPushButton, "pushButton_3")
@@ -120,12 +126,13 @@ class MainWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         global uid
-
-        self.connection = DatabaseConnection().get_connection()
+        global db
+        self.connection = db.get_connection()
 
         #Loading .ui file
         uic.loadUi('UI/mainwindow.ui', self)
 
+        self.searchField=self.findChild(QLineEdit, 'lineEdit')
         self.addEarningButton=self.findChild(QPushButton, "pushButton")
         self.lightThemeCheckBox=self.findChild(QPushButton, "pushButton_3")
         self.totalSpendingValue=self.findChild(QLabel, "label_7")
@@ -144,6 +151,8 @@ class MainWindow(QMainWindow):
         self.totalEarningValue.setText(str(self.recordResult[0]))
         self.totalSpendingValue.setText(str(self.recordResult[1]))
 
+        
+
     def openDeleteRecordPopup(self):
         self.w=deleteRecordWindow()
         self.w.show()
@@ -154,6 +163,8 @@ class MainWindow(QMainWindow):
         self.w.show()
 
     def openSearchResults(self):
+        global searchFieldvalue
+        searchFieldvalue=self.searchField.text()
         self.w=searchResult()
         self.w.show()
 
@@ -168,9 +179,30 @@ class searchResult(QMainWindow):
     def __init__(self):
         super().__init__()
 
-        uic.loadUi('UI/searchResult.ui', self)
+        global uid
+        global searchFieldvalue
 
+        print(searchFieldvalue)
+
+        uic.loadUi('UI/searchResult.ui', self)
+        global db
+        self.connection = db.get_connection()
+
+        s=view_records(self.connection, uid, searchFieldvalue)
+        # index 1 and 2 correspond to name and amount
+        expenseLabel=self.findChild(QLabel, "label_3")
+        incomeLabel=self.findChild(QLabel, "label_4")
         
+        incometext=""
+        for i in s['INCOME_RECORDS']:
+            incometext+=f'{i[1]} - {i[2]}\n\n'
+        
+        expensetext=""
+        for i in s['EXPENSE_RECORDS']:
+            expensetext+=f'{i[1]} - {i[2]}\n\n'
+
+        expenseLabel.setText(expensetext)
+        incomeLabel.setText(incometext)
 
 
 class calenderWidget(QMainWindow):
@@ -203,8 +235,8 @@ class addExpenseWindow(QMainWindow):
         super().__init__()
 
         uic.loadUi("UI/addExpenseWindow.ui", self)
-
-        self.connection = DatabaseConnection().get_connection()
+        global db
+        self.connection = db.get_connection()
 
         self.openEarningWindowButton=self.findChild(QPushButton, "pushButton_3")
         self.recurringExpenseCheckBox=self.findChild(QPushButton, "pushButton_5")
@@ -264,8 +296,8 @@ class addEarningWindow(QMainWindow):
         super().__init__()
 
         uic.loadUi("UI/addEarningWindow.ui", self)
-
-        self.connection = DatabaseConnection().get_connection()
+        global db
+        self.connection = db.get_connection()
 
 
         self.openExpenseWindowButton=self.findChild(QPushButton, "pushButton_4")

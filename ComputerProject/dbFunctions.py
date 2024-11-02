@@ -12,6 +12,19 @@ class DatabaseConnection:
     def get_connection(self):
         return self.connection
 
+'''
+class DatabaseConnection:
+    def __init__(self):
+        self.connection = mysql.connector.connect(
+            user= 'root',
+            password= 'mysql',
+            host= 'localhost',
+            database= 'csproj',
+        )
+
+    def get_connection(self):
+        return self.connection
+'''
 
 
 # Function to execute a query
@@ -66,11 +79,11 @@ def delete_income(connection, income_id):
 
 # Record-related functions
 def view_records(connection, user_id, date):
-    query = f"SELECT * FROM Income WHERE user_id = {user_id} AND income_date = {date}"
-    record_list = fetch_results(connection, query)
-    query = f"SELECT * FROM Expenses WHERE user_id = {user_id} AND expense_date = {date}"
-    record_list += fetch_results(connection, query)
-    return record_list
+    query = f"SELECT * FROM Income WHERE user_id = {user_id} AND income_date = '{date}'"
+    income_list = fetch_results(connection, query)
+    query = f"SELECT * FROM Expenses WHERE user_id = {user_id} AND expense_date = '{date}'"
+    expense_list = fetch_results(connection, query)
+    return {'INCOME_RECORDS':income_list, 'EXPENSE_RECORDS':expense_list}
 
 
 def view_recent_records(connection, user_id):
@@ -84,7 +97,7 @@ def view_recent_records(connection, user_id):
 
 
 def delete_income(connection, user_id, date):
-    query = f"DELETE FROM Income WHERE user_id = {user_id} AND income_date = {date}"
+    query = f"DELETE FROM Income WHERE user_id = {user_id} AND income_date = '{date}'"
     execute_query(connection, query)
-    query = f"DELETE FROM Expenses WHERE user_id = {user_id} AND expense_date = {date}"
+    query = f"DELETE FROM Expenses WHERE user_id = {user_id} AND expense_date = '{date}'"
     execute_query(connection, query)
