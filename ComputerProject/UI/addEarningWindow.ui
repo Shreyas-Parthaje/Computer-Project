@@ -29,7 +29,7 @@
     <string/>
    </property>
    <property name="pixmap">
-    <pixmap resource="background_addEarningAndExpenseWindow.qrc">:/newPrefix/—Pngtree—hand painted simple blue sky_954141.jpg</pixmap>
+    <pixmap>:/newPrefix/—Pngtree—hand painted simple blue sky_954141.jpg</pixmap>
    </property>
    <property name="scaledContents">
     <bool>true</bool>
@@ -307,7 +307,7 @@ background-color:rgba(61, 40, 224, 0.2);
 color:rgb(71, 71, 71);</string>
     </property>
     <property name="text">
-     <string>11/09/2001</string>
+     <string>2001-09-11</string>
     </property>
    </widget>
    <widget class="QLabel" name="label_3">

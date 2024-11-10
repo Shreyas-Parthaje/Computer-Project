@@ -288,7 +288,7 @@ background-color:rgba(61, 40, 224, 0.2);
 color:rgb(71, 71, 71);</string>
     </property>
     <property name="text">
-     <string>11/9/2001</string>
+     <string>2001-09-11</string>
     </property>
    </widget>
    <widget class="QLabel" name="label_3">
