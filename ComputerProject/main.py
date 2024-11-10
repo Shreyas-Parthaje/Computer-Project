@@ -217,17 +217,23 @@ class calenderWidget(QMainWindow):
 
         self.setDateButton.clicked.connect(self.setDate)
 
+    def dateSanitizer(self, dateText):
+        dateList=dateText.split()[1:]
+        months={'Jan':1, 'Feb':2, 'March':3, 'April':4, 'May':5, 'June':6, 'July':7, 'Aug':8, 'Sep':9, 'Oct':10, 'Nov':11, 'Dec':12}
+        return f"{dateList[-1]}-{months[dateList[0]]}-{dateList[-2]}"
+
     def setDate(self):
         global calenderWindowSource
         self.selectedDate=self.calender.selectedDate().toString()
+        sanitizedDate=self.dateSanitizer(self.selectedDate)
 
         if calenderWindowSource=='addEarningWindow':
             self.addEarningWindow=addEarningWindow()
-            self.addEarningWindow.dateButton.setText(self.selectedDate)
+            self.addEarningWindow.dateButton.setText(sanitizedDate)
             self.addEarningWindow.show()
         else:
             self.addExpenseWindow=addExpenseWindow()
-            self.addExpenseWindow.dateButton.setText(self.selectedDate)
+            self.addExpenseWindow.dateButton.setText(sanitizedDate)
             self.addExpenseWindow.show()
 
 class addExpenseWindow(QMainWindow):
