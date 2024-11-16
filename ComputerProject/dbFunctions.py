@@ -1,5 +1,6 @@
 import mysql.connector
 
+'''
 class DatabaseConnection:
     def __init__(self):
         self.connection = mysql.connector.connect(
@@ -24,7 +25,7 @@ class DatabaseConnection:
 
     def get_connection(self):
         return self.connection
-'''
+
 
 
 # Function to execute a query
@@ -96,7 +97,7 @@ def view_recent_records(connection, user_id):
     return (recent_income, recent_expenses)
 
 
-def delete_income(connection, user_id, date):
+def delete_record(connection, user_id, date):
     query = f"DELETE FROM Income WHERE user_id = {user_id} AND income_date = '{date}'"
     execute_query(connection, query)
     query = f"DELETE FROM Expenses WHERE user_id = {user_id} AND expense_date = '{date}'"

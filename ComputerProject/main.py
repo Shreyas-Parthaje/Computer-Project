@@ -117,8 +117,19 @@ class RegisterWindow(QMainWindow):
 class deleteRecordWindow(QMainWindow):
     def __init__(self):
         super().__init__()
-
+        global db
+        global uid
+        self.connection=db.get_connection()
         uic.loadUi('UI/deleteRecordWindow.ui', self)
+
+        self.deleteRecordButton=self.findChild(QPushButton, "pushButton")
+        self.dateField=self.findChild(QLineEdit, "lineEdit")
+        
+        self.deleteRecordButton.clicked.connect(self.deleteRecord)
+
+    def deleteRecord(self):
+        delete_record(self.connection, uid, self.dateField.text())
+
 
         
 
@@ -134,7 +145,6 @@ class MainWindow(QMainWindow):
 
         self.searchField=self.findChild(QLineEdit, 'lineEdit')
         self.addEarningButton=self.findChild(QPushButton, "pushButton")
-        self.lightThemeCheckBox=self.findChild(QPushButton, "pushButton_3")
         self.totalSpendingValue=self.findChild(QLabel, "label_7")
         self.totalEarningValue=self.findChild(QLabel, "label_5")
         self.searchButton=self.findChild(QPushButton, "pushButton_4")
@@ -142,7 +152,6 @@ class MainWindow(QMainWindow):
 
 
         self.addEarningButton.clicked.connect(self.openAddEarningWindow)
-        self.lightThemeCheckBox.clicked.connect(self.switchToLightTheme)
         self.searchButton.clicked.connect(self.openSearchResults)
         self.deleteRecordButton.clicked.connect(self.openDeleteRecordPopup)
         
@@ -167,13 +176,6 @@ class MainWindow(QMainWindow):
         searchFieldvalue=self.searchField.text()
         self.w=searchResult()
         self.w.show()
-
-    def switchToLightTheme(self):
-        if self.lightThemeCheckBox.isChecked():
-            self.lightThemeCheckBox.setStyleSheet('QPushButton{background-color:white;border:2px solid;border-radius:7px;border-color:rgb(62, 58, 83);}')
-        
-        else:
-            self.lightThemeCheckBox.setStyleSheet('QPushButton{background-color:rgb(61, 40, 224);border:2px solid;border-radius:7px;border-color:rgb(62, 58, 83);}')
 
 class searchResult(QMainWindow):
     def __init__(self):
@@ -205,6 +207,7 @@ class searchResult(QMainWindow):
         incomeLabel.setText(incometext)
 
 
+
 class calenderWidget(QMainWindow):
     def __init__(self):
         super().__init__()
@@ -224,7 +227,9 @@ class calenderWidget(QMainWindow):
 
     def setDate(self):
         global calenderWindowSource
+        #Day Month Date Year: Mon Nov 11 2024
         self.selectedDate=self.calender.selectedDate().toString()
+
         sanitizedDate=self.dateSanitizer(self.selectedDate)
 
         if calenderWindowSource=='addEarningWindow':
@@ -258,13 +263,6 @@ class addExpenseWindow(QMainWindow):
         self.addExpenseButton.clicked.connect(self.addExpense)
         self.dateButton.clicked.connect(self.openCalenderWindow)
 
-        #This code has to be improved.
-        self.dateText=self.dateButton.text().split('/')
-        self.sqlDateText=''
-
-        for i in self.dateText[::-1]:
-            self.sqlDateText+=i+'-'
-        self.sqlDateText=self.sqlDateText[0:-1]
 
     def openCalenderWindow(self):
         global calenderWindowSource
@@ -290,7 +288,7 @@ class addExpenseWindow(QMainWindow):
 
     def addExpense(self):
         global uid
-        add_expense(self.connection,  self.expenseNameField.text(), self.amountField.text(), self.sqlDateText, self.descriptionField.toPlainText(), uid, self.recurringExpenseCheckBox.isChecked())
+        add_expense(self.connection,  self.expenseNameField.text(), self.amountField.text(), self.dateButton.text(), self.descriptionField.toPlainText(), uid, self.recurringExpenseCheckBox.isChecked())
         msg=QMessageBox()
         msg.setWindowTitle("Successfull.")
         msg.setText("Record added successfully.")
@@ -320,14 +318,6 @@ class addEarningWindow(QMainWindow):
         self.addEarningButton.clicked.connect(self.addEarning)
         self.dateButton.clicked.connect(self.openCalenderWindow)
 
-        #This code has to be improved
-        self.dateText=self.dateButton.text().split('/')
-        self.sqlDateText=''
-
-        for i in self.dateText[::-1]:
-            self.sqlDateText+=i+'-'
-        self.sqlDateText=self.sqlDateText[0:-1]
-
     def openCalenderWindow(self):
         global calenderWindowSource
 
@@ -339,7 +329,7 @@ class addEarningWindow(QMainWindow):
 
     def addEarning(self):
         global uid
-        add_income(self.connection, self.earningNameField.text(), self.amountField.text(), self.sqlDateText, self.descriptionField.toPlainText(), uid, self.recurringEarningCheckBox.isChecked())
+        add_income(self.connection, self.earningNameField.text(), self.amountField.text(), self.dateButton.text(), self.descriptionField.toPlainText(), uid, self.recurringEarningCheckBox.isChecked())
         msg=QMessageBox()
         msg.setWindowTitle("Successfull.")
         msg.setText("Record added successfully.")
