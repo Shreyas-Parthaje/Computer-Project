@@ -1,0 +1,195 @@
+import mysql.connector
+from decimal import Decimal
+import matplotlib.pyplot as plt
+from datetime import datetime
+
+
+# Database connection class
+class DatabaseConnection:
+    def __init__(self):
+        try:
+            self.connection = mysql.connector.connect(
+                user='i7771355_e1zq1',
+                password='3u0NFC]{p~^#',
+                host='184.168.102.202',
+                database='csproj',
+            )
+        except mysql.connector.Error as err:
+            raise err
+
+    def get_connection(self):
+        return self.connection
+
+
+# Utility functions for database operations
+def execute_query(connection, query, values=None):
+    try:
+        cursor = connection.cursor()
+        if values:
+            cursor.execute(query, values)
+        else:
+            cursor.execute(query)
+        connection.commit()
+        return cursor.rowcount  # Number of affected rows
+    except mysql.connector.Error as err:
+        connection.rollback()  # Rollback in case of error
+        raise err
+
+
+def fetch_results(connection, query, values=None):
+    try:
+        cursor = connection.cursor()
+        if values:
+            cursor.execute(query, values)
+        else:
+            cursor.execute(query)
+        return cursor.fetchall()
+    except mysql.connector.Error as err:
+        raise err
+
+
+# User management
+def register_user(connection, username, password):
+    try:
+        query = "INSERT INTO Users (username, password) VALUES (%s, %s)"
+        values = (username, password)
+        execute_query(connection, query, values)
+    except Exception as e:
+        raise e
+
+
+def login_user(connection, username, password):
+    try:
+        query = "SELECT * FROM Users WHERE username = %s AND password = %s"
+        values = (username, password)
+        user = fetch_results(connection, query, values)
+        return user[0] if user else None
+    except Exception as e:
+        return None
+
+
+# Record management
+def add_expense(connection, expense_name, amount, expense_date, description, user_id, is_recurring):
+    try:
+        query = """
+        INSERT INTO Expenses (expense_name, amount, expense_date, description, user_id, is_recurring)
+        VALUES (%s, %s, %s, %s, %s, %s)
+        """
+        values = (expense_name, amount, expense_date, description, user_id, is_recurring)
+        execute_query(connection, query, values)
+    except Exception as e:
+        raise e
+
+
+def add_income(connection, source, amount, income_date, description, user_id, is_recurring):
+    try:
+        query = """
+        INSERT INTO Income (source, amount, income_date, description, user_id, is_recurring)
+        VALUES (%s, %s, %s, %s, %s, %s)
+        """
+        values = (source, amount, income_date, description, user_id, is_recurring)
+        execute_query(connection, query, values)
+    except Exception as e:
+        raise e
+
+
+def delete_expense(connection, record_id, user_id):
+    try:
+        query = "DELETE FROM Expenses WHERE expense_id = %s AND user_id = %s"
+        values = (record_id, user_id)
+        affected_rows = execute_query(connection, query, values)
+        return affected_rows > 0
+    except Exception as e:
+        return False
+
+
+def delete_income(connection, record_id, user_id):
+    try:
+        query = "DELETE FROM Income WHERE income_id = %s AND user_id = %s"
+        values = (record_id, user_id)
+        affected_rows = execute_query(connection, query, values)
+        return affected_rows > 0
+    except Exception as e:
+        return False
+
+
+# Viewing records
+def view_records(connection, user_id, name):
+    try:
+        query = "SELECT * FROM Income WHERE user_id = %s AND source LIKE %s"
+        values = (user_id, f"%{name}%")
+        income_list = fetch_results(connection, query, values)
+            
+        query = "SELECT * FROM Expenses WHERE user_id = %s AND expense_name LIKE %s"
+        values = (user_id, f"%{name}%")
+        expense_list = fetch_results(connection, query, values)
+        
+        return {'INCOME_RECORDS': income_list, 'EXPENSE_RECORDS': expense_list}
+    except Exception as e:
+        return None
+
+def view_recent_records(connection, user_id):
+    try:
+        # Fetch recent income
+        query_income = """
+        SELECT SUM(amount)
+        FROM Income
+        WHERE user_id = %s AND DATE_FORMAT(income_date, '%%Y-%%m') = (
+            SELECT DATE_FORMAT(MAX(income_date), '%%Y-%%m') FROM Income WHERE user_id = %s)
+        """
+        recent_income = fetch_results(connection, query_income, (user_id, user_id))
+        recent_income = recent_income[0][0] if recent_income and recent_income[0][0] else 0.00
+
+        # Fetch recent expenses
+        query_expense = """
+        SELECT SUM(amount)
+        FROM Expenses
+        WHERE user_id = %s AND DATE_FORMAT(expense_date, '%%Y-%%m') = (
+            SELECT DATE_FORMAT(MAX(expense_date), '%%Y-%%m') FROM Expenses WHERE user_id = %s)
+        """
+        recent_expenses = fetch_results(connection, query_expense, (user_id, user_id))
+        recent_expenses = recent_expenses[0][0] if recent_expenses and recent_expenses[0][0] else 0.00
+
+        return float(recent_income), float(recent_expenses)
+    except Exception as e:
+        print(f"Error in view_recent_records: {e}")
+        return 0.00, 0.00
+
+
+# Analytics function
+def analytics(connection, user_id):
+    try:
+        # Fetch totals
+        income_query = "SELECT SUM(amount) FROM Income WHERE user_id = %s"
+        expense_query = "SELECT SUM(amount) FROM Expenses WHERE user_id = %s"
+
+        total_income = fetch_results(connection, income_query, (user_id,))[0][0] or Decimal(0.00)
+        total_expenses = fetch_results(connection, expense_query, (user_id,))[0][0] or Decimal(0.00)
+
+        # Calculate net result
+        total_income, total_expenses = float(total_income), float(total_expenses)
+        net_result = total_income - total_expenses
+
+        # Generate bar chart
+        categories = ['Income', 'Expenses', 'Net Result']
+        values = [total_income, total_expenses, net_result]
+        colors = ['green', 'red', 'blue' if net_result >= 0 else 'orange']
+
+        plt.bar(categories, values, color=colors)
+        plt.title('Total Financial Summary (₹)')
+        plt.xlabel('Category')
+        plt.ylabel('Amount (₹)')
+        plt.grid(True)
+
+        for i, v in enumerate(values):
+            # Display values with the Indian Rupee sign
+            plt.text(i, v + 50, f'₹{v:,.2f}', ha='center', va='bottom', fontweight='bold')
+
+        plt.tight_layout()
+        plt.show()
+
+        # Return the result with Indian Rupee formatting
+        return ("Profit", f"₹{net_result:,.2f}") if net_result > 0 else ("Loss", f"₹{net_result:,.2f}") if net_result < 0 else ("Break Even", "₹0.00")
+    except Exception as e:
+        print(f"Error in analytics: {e}")
+        return "Error", None
